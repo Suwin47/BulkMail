@@ -116,12 +116,16 @@ app.post("/sendemail", async (req, res) => {
     }
 
     const data = await getCredentials();
+    console.log("Credential Data:", data);
 
     const emailUser =
       data?.user || data?.email || data?.username;
 
     const emailPass =
       data?.pass || data?.password || data?.appPassword;
+
+      console.log("Email User:", emailUser);
+      console.log("Email Pass:", emailPass);
 
     if (!emailUser || !emailPass) {
       return res.json({
@@ -138,6 +142,14 @@ app.post("/sendemail", async (req, res) => {
       },
     });
 
+    transporter.verify((error, success) => {
+      if (error) {
+        console.log("SMTP Error:", error);
+      } else {
+        console.log("SMTP Server is ready to take messages");
+      }
+    });
+    
     for (let i = 0; i < validEmails.length; i++) {
       await transporter.sendMail({
         from: emailUser,
