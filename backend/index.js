@@ -135,7 +135,9 @@ app.post("/sendemail", async (req, res) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
         user: emailUser,
         pass: emailPass.replace(/\s/g, ""),
@@ -149,7 +151,7 @@ app.post("/sendemail", async (req, res) => {
         console.log("SMTP Server is ready to take messages");
       }
     });
-    
+
     for (let i = 0; i < validEmails.length; i++) {
       await transporter.sendMail({
         from: emailUser,
