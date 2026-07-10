@@ -3,8 +3,6 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
 
-const PORT = process.env.PORT || 5000;
-
 const app = express();
 
 app.use(cors());
@@ -116,16 +114,12 @@ app.post("/sendemail", async (req, res) => {
     }
 
     const data = await getCredentials();
-    console.log("Credential Data:", data);
 
     const emailUser =
       data?.user || data?.email || data?.username;
 
     const emailPass =
       data?.pass || data?.password || data?.appPassword;
-
-      console.log("Email User:", emailUser);
-      console.log("Email Pass:", emailPass);
 
     if (!emailUser || !emailPass) {
       return res.json({
@@ -135,21 +129,11 @@ app.post("/sendemail", async (req, res) => {
     }
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
+      service: "gmail",
       auth: {
         user: emailUser,
         pass: emailPass.replace(/\s/g, ""),
       },
-    });
-
-    transporter.verify((error, success) => {
-      if (error) {
-        console.log("SMTP Error:", error);
-      } else {
-        console.log("SMTP Server is ready to take messages");
-      }
     });
 
     for (let i = 0; i < validEmails.length; i++) {
@@ -179,12 +163,13 @@ app.post("/sendemail", async (req, res) => {
     });
   } catch (error) {
     console.log(
-      "Error sending email:",error
+      "Error sending email:",
+      error.message
     );
 
-
     if (
-      isMongoConnected && validEmails.length > 0
+      isMongoConnected &&
+      validEmails.length > 0
     ) {
       await EmailRecord.create({
         subject,
@@ -196,7 +181,7 @@ app.post("/sendemail", async (req, res) => {
 
     res.json({
       success: false,
-      message: error.message || "Failed to send email",
+      message: "Failed to send email",
     });
   }
 });
@@ -221,8 +206,8 @@ app.get("/history", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(5000, () => {
   console.log(
-    `Server is running on port ${PORT}`
+    "Server is running on port 5000"
   );
 });

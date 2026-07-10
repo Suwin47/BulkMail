@@ -12,8 +12,6 @@ function App() {
     const [status, setStatus] = useState(false);
     const [notice, setNotice] = useState('');
     const [history, setHistory] = useState([]);
-    
-
 
     function getManualEmails() {
         return manualEmails
@@ -27,7 +25,7 @@ function App() {
     }
 
     function loadHistory() {
-        axios.get('https://bulkmail-t1ti.onrender.com/history')
+        axios.get('http://localhost:5000/history')
             .then((response) => setHistory(response.data))
             .catch(() => setHistory([]));
     }
@@ -75,7 +73,7 @@ function App() {
         setStatus(true);
         setNotice('Sending email...');
 
-        axios.post('https://bulkmail-t1ti.onrender.com/sendemail', {
+        axios.post('http://localhost:5000/sendemail', {
             subject: subject,
             message: message,
             emailList: emailList,
@@ -111,11 +109,19 @@ function App() {
 
                 <div className="mb-6 flex justify-center">
                     <div className="inline-flex rounded-lg border border-gray-300 bg-gray-50 p-1">
-                        <button onClick={() => setActiveTab('send')} className={`px-5 py-2 rounded-md font-semibold ${activeTab === 'send' ? 'bg-blue-600 text-white' : 'text-gray-700'}`}>
+                        <button
+                            onClick={() => setActiveTab('send')}
+                            className={`px-5 py-2 rounded-md font-semibold ${activeTab === 'send' ? 'bg-blue-600 text-white' : 'text-gray-700'}`}
+                        >
                             Send Mail
                         </button>
-                        <button onClick={() => { setActiveTab('history'); loadHistory(); }}
-                                className={`px-5 py-2 rounded-md font-semibold ${activeTab === 'history' ? 'bg-blue-600 text-white' : 'text-gray-700'}`} >
+                        <button
+                            onClick={() => {
+                                setActiveTab('history');
+                                loadHistory();
+                            }}
+                            className={`px-5 py-2 rounded-md font-semibold ${activeTab === 'history' ? 'bg-blue-600 text-white' : 'text-gray-700'}`}
+                        >
                             History
                         </button>
                     </div>
@@ -125,20 +131,35 @@ function App() {
                     <div className="space-y-5">
                         <div>
                             <label className="block text-gray-700 font-medium mb-2">Subject</label>
-                            <input type="text" onChange={(e) => setSubject(e.target.value)} value={subject} placeholder="Enter email subject"
-                                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                            <input
+                                type="text"
+                                onChange={(e) => setSubject(e.target.value)}
+                                value={subject}
+                                placeholder="Enter email subject"
+                                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
                         </div>
 
                         <div>
                             <label className="block text-gray-700 font-medium mb-2">Email Body</label>
-                            <textarea onChange={(e) => setMessage(e.target.value)} value={message} rows="7" placeholder="Write your email content..."
-                                className="w-full border border-gray-300 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <textarea
+                                onChange={(e) => setMessage(e.target.value)}
+                                value={message}
+                                rows="7"
+                                placeholder="Write your email content..."
+                                className="w-full border border-gray-300 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
                         </div>
 
                         <div>
                             <label className="block text-gray-700 font-medium mb-2">Recipient Emails</label>
-                            <textarea onChange={(e) => setManualEmails(e.target.value)} value={manualEmails} rows="3" placeholder="Enter Valid Emails"
-                                className="w-full border border-gray-300 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                            <textarea
+                                onChange={(e) => setManualEmails(e.target.value)}
+                                value={manualEmails}
+                                rows="3"
+                                placeholder="Enter emails separated by comma, space, or new line"
+                                className="w-full border border-gray-300 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
                         </div>
 
                         <div>
@@ -154,10 +175,15 @@ function App() {
                             <p className="text-center mt-4 font-semibold text-blue-600">Total Recipients: {totalEmails}</p>
                         </div>
 
-                        {notice && ( <p className="text-center font-semibold text-blue-600">{notice}</p> )}
+                        {notice && (
+                            <p className="text-center font-semibold text-blue-600">{notice}</p>
+                        )}
 
-                        <button onClick={sendEmail} disabled={status}
-                            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-900 transition duration-300 disabled:bg-gray-400" >
+                        <button
+                            onClick={sendEmail}
+                            disabled={status}
+                            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-900 transition duration-300 disabled:bg-gray-400"
+                        >
                             {status ? 'Sending...' : 'Send Email'}
                         </button>
                     </div>
