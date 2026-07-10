@@ -75,7 +75,7 @@ function App() {
         setStatus(true);
         setNotice('Sending email...');
 
-        axios.post('http://localhost:5000/sendemail', {
+        axios.post('https://bulkmail-t1ti.onrender.com/sendemail', {
             subject: subject,
             message: message,
             emailList: emailList,
