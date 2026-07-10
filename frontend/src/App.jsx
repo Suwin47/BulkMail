@@ -3,6 +3,8 @@ import axios from 'axios';
 import * as XLSX from 'xlsx';
 
 function App() {
+
+    const API_URL = import.meta.env.VITE_API_URL;
     const [activeTab, setActiveTab] = useState('send');
     const [file, setFile] = useState(null);
     const [fileEmails, setFileEmails] = useState([]);
@@ -25,7 +27,7 @@ function App() {
     }
 
     function loadHistory() {
-        axios.get('http://localhost:5000/history')
+        axios.get(`${API_URL}/history`)
             .then((response) => setHistory(response.data))
             .catch(() => setHistory([]));
     }
@@ -73,7 +75,7 @@ function App() {
         setStatus(true);
         setNotice('Sending email...');
 
-        axios.post('http://localhost:5000/sendemail', {
+        axios.post(`${API_URL}/sendemail`, {
             subject: subject,
             message: message,
             emailList: emailList,
