@@ -6,6 +6,9 @@ const mongoose = require("mongoose");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first");
+
 app.use(cors());
 app.use(express.json());
 
@@ -131,11 +134,14 @@ app.post("/sendemail", async (req, res) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
         user: emailUser,
         pass: emailPass.replace(/\s/g, ""),
       },
+      family: 4,
     });
 
     for (let i = 0; i < validEmails.length; i++) {
