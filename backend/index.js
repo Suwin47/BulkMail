@@ -84,6 +84,7 @@ async function getCredentials() {
 }
 
 app.post("/sendemail", async (req, res) => {
+  console.log("BODY:", req.body);
   let subject = "";
   let message = "";
   let validEmails = [];
