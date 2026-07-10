@@ -165,13 +165,12 @@ app.post("/sendemail", async (req, res) => {
     });
   } catch (error) {
     console.log(
-      "Error sending email:",
-      error.message
+      "Error sending email:",error
     );
 
+
     if (
-      isMongoConnected &&
-      validEmails.length > 0
+      isMongoConnected && validEmails.length > 0
     ) {
       await EmailRecord.create({
         subject,
@@ -183,7 +182,7 @@ app.post("/sendemail", async (req, res) => {
 
     res.json({
       success: false,
-      message: "Failed to send email",
+      message: error.message || "Failed to send email",
     });
   }
 });
