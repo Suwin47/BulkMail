@@ -27,7 +27,7 @@ function App() {
     }
 
     function loadHistory() {
-        axios.get('http://localhost:5000/history')
+        axios.get('https://bulkmail-t1ti.onrender.com/history')
             .then((response) => setHistory(response.data))
             .catch(() => setHistory([]));
     }
